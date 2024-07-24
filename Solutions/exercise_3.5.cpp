@@ -2,12 +2,13 @@
 
 using namespace std;
 
-class Point{
+class Point {
     double theX;
     double theY;
     
 	public:
     //constructor
+    Point(){}
     Point(double theX, double theY){
         this->setX(theX);
         this->setY(theY);
@@ -40,72 +41,61 @@ class Point{
     void display(){
         cout <<this->getX()<<", "<<this->getY() << endl;
     }
-    
     //destructor
 };
-class Line{
-	Point theStart;
-	Point theEnd;
-	
-	public:
-	//constructure
-	Line(Point theStart, Point theEnd) : theStart(theStart), theEnd(theEnd) {}
 
-	
-	//getter
-	Point getTheStart() {
+class Line {
+    Point theStart;
+    Point theEnd;
+    
+	public:
+    Line(Point* aStart, Point* anEnd) {
+        this->setStart(aStart);
+        this->setEnd(anEnd);
+    }
+    //getters
+    Point getStart() {
         return this->theStart;
     }
-    Point getTheEnd() {
+    Point getEnd() {
         return this->theEnd;
     }
-    
-    //setter
-	void setTheStart(Point theStart) {
-        this->theStart = theStart;
+    //setters
+    void setStart(Point* aStart) {
+        this->theStart = *aStart;
     }
-    void setTheEnd(Point theEnd) {
-        this->theEnd = theEnd;
+    void setEnd(Point* anEnd) {
+        this->theEnd = *anEnd;
     }
-	//method
-	bool isHorizontal(){
-        return theStart.getY() == theEnd.getY();
+    //methods
+    bool isHorizontal() {
+        return this->getStart().getX() == this->getEnd().getY();
     }
-    
-    bool isVertical(){
-        return theStart.getX() == theEnd.getX();
+    bool isVertical() {
+        return this->getStart().getX() == this->getEnd().getX();
     }
-  
-    void moveBy(double dx, double dy){
-        theStart.moveBy(dx, dy);
-        theEnd.moveBy(dx, dy);
+    void moveBy(double anX, double anY) {
+        Point a(this->getStart().getX() + anX, this->getStart().getY() + anY);
+        Point b(this->getEnd().getX() + anX, this->getEnd().getY() + anY);
+        this->setStart(&a);
+        this->setEnd(&b);
     }
-    
-    //display
-    void check(){
-    	if (this->isHorizontal()){
-    		cout<<"horizontal"<<endl;
-		} else if(this->isVertical()){
-			cout<<"vertical"<<endl;
-		} else {
-			cout<<"not horizontal or vertical";
-		}
-	}
-	void display(){
-		theStart.display();
-        theEnd.display();
-	}
-	
+    void display() {
+        if (this->isHorizontal())
+            cout << "Horizontal Line" << endl;
+        else if (this->isVertical())
+            cout << "Vertical Line" << endl;
+        else
+            cout << "Cross Line L: (" << this->getStart().getX() << ", " << this->getStart().getY() << ") to (" << this->getEnd().getX() << ", " << this->getEnd().getY() << ")" << endl;
+    }
 };
-int main(){
+
+int main() {
     //declare objects
-   Point a(2,1);
-   Point b(3,1);
-   
-   Line c(a,b);
-   c.check();
-   c.moveBy(2,2);
-   c.display();
-   
-   return 0;
+    Point a(1, -1);
+    Point b(2, 3);
+    Line l(&a, &b);
+    //call the method
+    l.moveBy(4, 3);
+    l.display();
 }
